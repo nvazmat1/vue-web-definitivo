@@ -37,15 +37,15 @@ const scrollToSection = (sectionId) => {
 
 <template>
   <main class="batman">
-    <nav class="extra-nav" aria-label="Navegación de Batman">
+    <nav class="extra-nav flex flex-col sm:flex-row" aria-label="Navegación de Batman">
       <RouterLink class="home-link" to="/" aria-label="Volver a portada">
         <House class="icon-home" />
       </RouterLink>
 
-      <NavigationMenu :viewport="false">
-        <NavigationMenuList>
+      <NavigationMenu class="w-full max-w-none flex-none justify-start" :viewport="false">
+        <NavigationMenuList class="flex w-full flex-col items-stretch justify-start sm:w-auto sm:flex-row">
           <NavigationMenuItem>
-            <NavigationMenuLink as-child :class="navigationMenuTriggerStyle()">
+            <NavigationMenuLink as-child :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
               <a href="#vehiculis" @click.prevent="scrollToSection('#vehiculis')">
                 Vehículos
               </a>
@@ -53,7 +53,7 @@ const scrollToSection = (sectionId) => {
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuLink as-child :class="navigationMenuTriggerStyle()">
+            <NavigationMenuLink as-child :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
               <a href="#videre" @click.prevent="scrollToSection('#videre')">
                 Imágenes
               </a>
@@ -61,7 +61,7 @@ const scrollToSection = (sectionId) => {
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuLink as-child :class="navigationMenuTriggerStyle()">
+            <NavigationMenuLink as-child :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
               <a href="#contactus" @click.prevent="scrollToSection('#contactus')">
                 Contacto
               </a>
@@ -129,6 +129,7 @@ const scrollToSection = (sectionId) => {
 
 <style scoped>
 .batman {
+  position: relative;
   min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -140,6 +141,7 @@ const scrollToSection = (sectionId) => {
   box-sizing: border-box;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   min-height: 4rem;
   padding: 0 1rem;
@@ -156,6 +158,10 @@ const scrollToSection = (sectionId) => {
 .icon-home {
   width: 1.75rem;
   height: 1.75rem;
+}
+
+.titulus {
+  position: relative;
 }
 
 .titulus-img {
@@ -205,6 +211,22 @@ const scrollToSection = (sectionId) => {
 .page-section h2 {
   margin: 0;
   font-size: 2rem;
+}
+
+@media (max-width: 639px) {
+  .extra-nav {
+    position: absolute;
+    inset: 0 auto auto 0;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.25rem;
+    width: 11rem;
+    min-height: 0;
+    padding: 0.5rem;
+    border-radius: 0 0 1rem 0;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
 }
 
 @media (min-width: 768px) {
@@ -305,8 +327,7 @@ const scrollToSection = (sectionId) => {
   }
 
   .unus > img {
-    order: 1;
-     
+    order: -1;
   }
 
   @media (min-width: 1024px) {
