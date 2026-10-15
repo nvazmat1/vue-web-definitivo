@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { House } from '@lucide/vue'
+import { House, Menu } from '@lucide/vue'
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -9,23 +9,40 @@ import {
 } from '@/components/ui/navigation-menu'
 
 import CarrusImaginum from '@/components/ui/CarrusImaginum.vue'
-
-
 import { scrollToSection } from '@/utils/scrollToSection';
-
-
+import { onMounted, ref } from 'vue';
 
 const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"]; 
 
+const videreMenu = ref<boolean>(true)
+
+const handleResize = () => {
+  if (window.innerWidth < 640) {
+    videreMenu.value = false
+  } else {
+    videreMenu.value = true
+  }
+}
+
+onMounted(() => {
+  handleResize()
+  window.addEventListener('resize', handleResize)
+})
 </script>
 
 <template>
   <main>
-
     <div class="batman">
 
+    <Toggle class="fixed top-2 right-4 z-50 bg-slate-500 sm:hidden"
+      @click="videreMenu = !videreMenu"
+      >
+      <Menu/>
 
-    <nav class="extra-nav flex flex-col sm:flex-row" aria-label="Navegación de Batman">
+    </Toggle>
+
+
+    <nav v-if="videreMenu" class="['extra-nav flex flex-col sm:flex-row', { 'is-open': videreMenu }]" aria-label="Navegación de Batman">
       <RouterLink class="home-link" to="/" aria-label="Volver a portada">
         <House class="icon-home" />
       </RouterLink>
@@ -122,6 +139,10 @@ const photos = ["justice", "arkham", "superman", "varios", "villana", "villano",
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.menu-toggle {
+  display: none;
+}
+
 .extra-nav {
   position: fixed;
   inset: 0 0 auto;
@@ -202,9 +223,27 @@ const photos = ["justice", "arkham", "superman", "varios", "villana", "villano",
 }
 
 @media (max-width: 639px) {
-  .extra-nav {
+  .menu-toggle {
     position: absolute;
-    inset: 0 auto auto 0;
+    inset: 0 0 auto;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 2.75rem;
+    padding: 0 1rem;
+    border: 0;
+    border-radius: 0;
+    background: #fff;
+    color: #222;
+    cursor: pointer;
+  }
+
+  .extra-nav {
+    display: none;
+    position: absolute;
+    inset: 2.75rem auto auto 0;
     align-items: flex-start;
     justify-content: flex-start;
     gap: 0.25rem;
@@ -214,6 +253,10 @@ const photos = ["justice", "arkham", "superman", "varios", "villana", "villano",
     border-radius: 0 0 1rem 0;
     background: rgba(255, 255, 255, 0.82);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+
+  .extra-nav.is-open {
+    display: flex;
   }
 }
 
