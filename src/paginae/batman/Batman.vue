@@ -14,7 +14,15 @@ import { onMounted, ref } from 'vue';
 
 const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"]; 
 
+interface Coordinatas {
+  x: number
+  y: number
+}
+
 const videreMenu = ref<boolean>(true)
+
+const mousePositione = ref <Coordinatas>({ x: 0, y: 0})
+  
 
 const handleResize = () => {
   if (window.innerWidth < 640) {
@@ -28,6 +36,34 @@ onMounted(() => {
   handleResize()
   window.addEventListener('resize', handleResize)
 })
+
+onMounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
+
+const cumMouseMove = (e: MouseEvent) => {
+
+const rect = (e.target as HTMLElement).getBoundingClientRect()
+
+const centerX = rect.left + rect.width / 2
+const centerY = rect.top + rect.height / 2
+
+const mouseX = e.clientX - rect.left
+const mouseY = e.clientY -rect.top
+
+mousePositione.value = {
+  x: (centerX - mouseX) * 0.1,
+  y: (centerY - mouseY) * 0.1
+}
+}
+
+const cumMouseLeave = () => {
+  mousePosition.value = {
+    x: 0,
+    y: 0
+  }
+}
+
 </script>
 
 <template>
@@ -76,9 +112,17 @@ onMounted(() => {
       </NavigationMenu>
     </nav>
 
-    <header id="portada-batman" class="titulus">
+    <header id="titulus-batman" class="titulus">
       <h1>Batman</h1>
-      <div class="titulus-img"></div>
+      <div class="titulus-img"
+      @mousemove="cumMouseMove"
+      @mouseleave="cumMouseLeave"
+      :style="{
+        backgroundPositionX: `calc(50% + ${mousePositione.x}px)`,
+        backgroundPositionY: `calc(50% + ${mousePositione.y}px)`,
+        transition: 'background-position 0.1s ease-out'
+      }"
+      ></div>
       <p>Él puede tomar las decisiones que nadie más puede, la decisión correcta</p>
     </header>
 
@@ -174,16 +218,15 @@ onMounted(() => {
 }
 
 .titulus-img {
-  min-height: 100vh;
-  background-color: #151934;
+  aspect-ratio: 8/7;
   background-image: url("../imagines/batman/batman.jpg");
-  background-position: center;
-  background-size: cover;
+  background-position: center center;
+  background-size: 100% 100%;
 }
 
 .titulus > h1 {
   position: absolute;
-  top: 63%;
+  top: calc(100vw * 0.5);
   width: 100%;
   margin: 0;
   color: white;
@@ -195,7 +238,7 @@ onMounted(() => {
 
 .titulus > p {
   position: absolute;
-  top: 36%;
+  top: calc(100vw * 0.25);
   width: 100%;
   color: white;
   font-family: batman, Arial, sans-serif;
