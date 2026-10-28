@@ -1,44 +1,60 @@
 <script setup lang="ts">
-import { House, Menu } from '@lucide/vue'
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu'
+
+
 
 import CarrusImaginum from '@/components/ui/CarrusImaginum.vue'
 import { scrollToSection } from '@/utils/scrollToSection';
-import { onMounted, ref } from 'vue';
 import { useMouseMotio } from '@/composables/useMouseMotion';
+import { Navigation } from '@lucide/vue';
+import NavigatorPrimarius from '@/components/NavigatorPrimarius.vue';
+import { MenuItem } from 'reka-ui/internal';
+
+
+interface MenuItems {
+  label: string
+  href: string
+  onClick?: () => void
+
+} 
+
+interface Props {
+  items: MenuItems[]
+  homeRoute?: string
+} 
+
+withDefaults(defineProps<Props>(), {
+  homeRoute: '/',
+})
+
+
 
 const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"]; 
 
 const { mousePositione, cumMouseMove, cumMouseLeave } = useMouseMotio()
 
-const videreMenu = ref<boolean>(true)
+const menuItems = [
+ {
+  label: 'Portada',
+  href: '#',
+  onClick: () => scrollToSection('#')
+ }, 
+ {
+  label: 'Vehiculos',
+  href: '#vehiculis',
+  onClick: () => scrollToSection('#vehiculis')
+ }, 
+  {
+  label: 'Imágenes',
+  href: '#videre',
+  onClick: () => scrollToSection('#videre')
+ }, 
+  {
+  label: 'Contacto',
+  href: '#contactus',
+  onClick: () => scrollToSection('#contactus')
+ }, 
 
-  
-
-const handleResize = () => {
-  if (window.innerWidth < 640) {
-    videreMenu.value = false
-  } else {
-    videreMenu.value = true
-  }
-}
-
-onMounted(() => {
-  handleResize()
-  window.addEventListener('resize', handleResize)
-})
-
-onMounted(() => {
-  window.removeEventListener('resize', handleResize)
-})
-
-
+] 
 
 </script>
 
@@ -46,47 +62,7 @@ onMounted(() => {
   <main>
     <div class="batman">
 
-    <Toggle class="fixed top-2 right-4 z-50 bg-slate-500 sm:hidden"
-      @click="videreMenu = !videreMenu"
-      >
-      <Menu/>
-
-    </Toggle>
-
-
-    <nav v-if="videreMenu" class="['extra-nav flex flex-col sm:flex-row', { 'is-open': videreMenu }]" aria-label="Navegación de Batman">
-      <RouterLink class="home-link" to="/" aria-label="Volver a portada">
-        <House class="icon-home" />
-      </RouterLink>
-
-      <NavigationMenu class="w-full max-w-none flex-none justify-start" :viewport="false">
-        <NavigationMenuList class="flex w-full flex-col items-stretch justify-start sm:w-auto sm:flex-row">
-          <NavigationMenuItem>
-            <NavigationMenuLink as-child :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
-              <a href="#vehiculis" @click.prevent="scrollToSection('#vehiculis')">
-                Vehículos
-              </a>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <NavigationMenuLink as-child :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
-              <a href="#videre" @click.prevent="scrollToSection('#videre')">
-                Imágenes
-              </a>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <NavigationMenuLink as-child :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
-              <a href="#contactus" @click.prevent="scrollToSection('#contactus')">
-                Contacto
-              </a>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
-    </nav>
+    <NavigatorPrimarius :items="menuItems" homeRoute="/" />
 
     <header id="titulus-batman" class="titulus">
       <h1>Batman</h1>
@@ -184,10 +160,7 @@ onMounted(() => {
   color: slateblue;
 }
 
-.icon-home {
-  width: 1.75rem;
-  height: 1.75rem;
-}
+
 
 .titulus {
   position: relative;
