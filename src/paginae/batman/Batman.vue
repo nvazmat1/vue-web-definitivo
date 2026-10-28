@@ -5,7 +5,7 @@
 import CarrusImaginum from '@/components/ui/CarrusImaginum.vue'
 import { scrollToSection } from '@/utils/scrollToSection';
 import { useMouseMotio } from '@/composables/useMouseMotion';
-import { Navigation } from '@lucide/vue';
+import { LucideBadgeCheck, Navigation } from '@lucide/vue';
 import NavigatorPrimarius from '@/components/NavigatorPrimarius.vue';
 import { MenuItem } from 'reka-ui/internal';
 import { Label } from '@/components/ui/label'
@@ -27,6 +27,9 @@ import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import type { DateValue } from 'reka-ui';
 import { ref } from 'vue'
+import { toast } from 'vue-sonner'
+import { Loader2, Mail, MapPin, MessageCircle, Phone, X } from '@lucide/vue';
+import { Icon } from '@iconify/vue';
 
 const dies = ref<DateValue>()
 
@@ -83,6 +86,22 @@ const menuItems = [
 
 const mittereSubmit = async () => {
   estLoading.value = true
+  toast.success(`Solicitud enviada correctamente
+  - Nombre: ${nomen.value} ${cognomen.value}
+  - Misión: ${missio.value}
+  - Fecha: ${dies.value ? `${dies.value.day}/${dies.value.month}/${dies.value.year}` : 'No especificada'}`), {
+  duration: 4000,
+  position: 'top-right',
+  icon: LucideBadgeCheck,
+  style: {
+    background: '#201c3b',
+    color: '#fff',
+    whiteSpace: 'pre-wrap',
+  },
+ } 
+
+
+
   await new Promise((resolve) => setTimeout(resolve, 2000))
   estLoading.value = false
 
@@ -91,14 +110,12 @@ const mittereSubmit = async () => {
     nomen: nomen.value,
     cognomen: cognomen.value,
     missio: missio.value,
-
   })
-  
-  nomen.value = ""
-  cognomen.value = ""
-  missio.value = ""
-}
 
+  nomen.value = ''
+  cognomen.value = ''
+  missio.value = ''
+}
 
 </script>
 
@@ -256,6 +273,7 @@ const mittereSubmit = async () => {
                       </PopoverContent>
                     </Popover>
                 </div>
+
                  <Button
                  type="submit"
                  class="w-full bg-brand-purple hover:bg-brand-purple-dark"
@@ -282,17 +300,23 @@ const mittereSubmit = async () => {
                   
               <div class="space-y-2">
                 <p class="flex items-center gap-2 justify-center md:justify-start">
-
+                  <Phone 
+                  class="w-5 h-5">
+                  </Phone>
                   +1 (555) 123-4567
 
                 </p>
                 <p class="flex items-center gap-2 justify-center md:justify-start">
-
+                  <Mail 
+                  class="w-5 h-5"
+                  />
                   batman@wayneenterprises.com
 
                 </p>
                 <p class="flex items-center gap-2 justify-center md:justify-start">
-
+                  <MapPin 
+                  class="w-5 h-5">
+                  </MapPin>
                   Wayne Manor, Gotham City
 
                 </p>
@@ -304,10 +328,10 @@ const mittereSubmit = async () => {
               <h3 class="text-xl font-bold text-white">Síguenos</h3>
               <div class="flex gap-8 justify-center">
               
-                Icono de X -
-                Icono de Instagram -
-                Icono de Linkedin - 
-                Icono de MessageCircle
+                <X class="w-10 h-10 hover: hover:text-white" />
+                <Icon icon="mdi:instagram" class="w-10 h-10 hover:text-white"/>
+                <Icon icon="mdi:linkedin" class="w-10 h-10 hover:text-white"/>
+                <MessageCircle class="w-10 h-10 hover:text-white"/>
                     
               </div>
           </div>
