@@ -27,41 +27,36 @@ export const router = createRouter({
         {
           path: '',
           name: 'simpsons',
-          components: Primus
-
+          component: Primus,
         },
+        {
+          path: 'about',
+          component: Layout,
+          children: [
             {
-              path:'about',
-              name: 'Layout',
-              children: [
-                {
-                  path: '',
-                  name: 'simpsons-about',
-                  component: Circa
-                }
-
-              ]
+              path: '',
+              name: 'simpsons-about',
+              component: Circa,
             },
-
+          ],
+        },
+        {
+          path: 'gallery',
+          component: Layout,
+          children: [
             {
-              path:'gallery',
-              name: 'Layout',
-              children: [
-                {
-                  path: '',
-                  name: 'simpsons-characters',
-                  component: Collectione
-                },
-                {
-                  path: ':id',
-                  name: 'simpsons-characters',
-                  component: Character
-                }
-
-              ]
-            }
-      ]
-     
+              path: '',
+              name: 'simpsons-characters',
+              component: Collectione,
+            },
+            {
+              path: ':id',
+              name: 'simpsons-character',
+              component: Character,
+            },
+          ],
+        },
+      ],
     },
 
     {
